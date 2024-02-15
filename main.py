@@ -15,8 +15,8 @@ while cap.isOpened():
         break
 
     # Set minimum and max HSV values to display
-    lower = np.array([8, 138, 0])
-    upper = np.array([255, 255, 255])
+    lower = np.array([5, 70, 70])
+    upper = np.array([15, 255, 255])
 
     # Create HSV Image and threshold into a range.
     mask = cv2.GaussianBlur(frame, (11, 11), 0)

@@ -15,8 +15,8 @@ while cap.isOpened():
         break
 
     # Définir la couleur minimale et maximale pour le masque
-    lower = np.array([5, 70, 70])
-    upper = np.array([15, 255, 255])
+    lower = np.array([0, 100, 55])
+    upper = np.array([14, 255, 255])
 
     # Réduire le bruit avec un flou Gaussian
     mask = cv2.GaussianBlur(frame, (11, 11), 0)

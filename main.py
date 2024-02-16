@@ -24,7 +24,7 @@ while cap.isOpened():
     mask = cv2.inRange(mask, lower, upper)
 
     # Morphological operations
-    kernel = np.ones((5, 5), np.uint8)
+    kernel = np.ones((7, 7), np.uint8)
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
@@ -32,18 +32,17 @@ while cap.isOpened():
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     edged = cv2.Canny(mask, 10, 40)
-    min_circularity = 0.2
+    min_circularity = 0.7
+    min_area = 850
     # # Filter contours
     for contour in contours:
         area = cv2.contourArea(contour)
         perimeter = cv2.arcLength(contour, True)
         circularity = 4 * np.pi * (area / (perimeter * perimeter))
         # if area > min_area and circularity > min_circularity:
-        if circularity > min_circularity:
+        if circularity > min_circularity and area > min_area:
             cv2.drawContours(frame, [contour], -1, (0, 255, 0), 3)
             # break  # Assuming only one basketball, break after finding the first good match
-
-    # cv2.drawContours(frame, contours, -1, (0, 255, 0), 3)
 
     # Afficher l'image originale avec les contours
     cv2.imshow('Image originale avec contours', frame)

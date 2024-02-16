@@ -24,7 +24,7 @@ while cap.isOpened():
     mask = cv2.inRange(mask, lower, upper)
 
     # Morphological operations
-    kernel = np.ones((7, 7), np.uint8)
+    kernel = np.ones((2, 2), np.uint8)
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 

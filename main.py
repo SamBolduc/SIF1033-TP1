@@ -14,13 +14,14 @@ while cap.isOpened():
         print("Fin de la vidéo ou erreur de lecture")
         break
 
-    # Set minimum and max HSV values to display
+    # Définir la couleur minimale et maximale pour le masque
     lower = np.array([5, 70, 70])
     upper = np.array([15, 255, 255])
 
-    # Create HSV Image and threshold into a range.
+    # Réduire le bruit avec un flou Gaussian
     mask = cv2.GaussianBlur(frame, (11, 11), 0)
     mask = cv2.cvtColor(mask, cv2.COLOR_BGR2HSV)
+    # Appliquer le range de couleur à masquer
     mask = cv2.inRange(mask, lower, upper)
 
     # Morphological operations
@@ -28,21 +29,20 @@ while cap.isOpened():
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
-    # Find contours
+    # Trouver les contours
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     edged = cv2.Canny(mask, 10, 40)
     min_circularity = 0.7
     min_area = 850
-    # # Filter contours
+    # # Filtrer les contours
     for contour in contours:
         area = cv2.contourArea(contour)
         perimeter = cv2.arcLength(contour, True)
         circularity = 4 * np.pi * (area / (perimeter * perimeter))
-        # if area > min_area and circularity > min_circularity:
+        # Garder seulement une circularité minimale et un air minimal de cercle
         if circularity > min_circularity and area > min_area:
             cv2.drawContours(frame, [contour], -1, (0, 255, 0), 3)
-            # break  # Assuming only one basketball, break after finding the first good match
 
     # Afficher l'image originale avec les contours
     cv2.imshow('Image originale avec contours', frame)
